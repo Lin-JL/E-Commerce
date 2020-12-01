@@ -52,4 +52,8 @@ public interface CommodityDao {
 //    public List<Comment> selectCommentsByID(Long commodityID);
 
     public int deleteOne(@Param("commodityID") Long commodityID, @Param("sellerID") String sellerID);
+
+    public List<Commodity> selectAll();
+
+    public int adminDeleteOne(Long commodityID);
 }

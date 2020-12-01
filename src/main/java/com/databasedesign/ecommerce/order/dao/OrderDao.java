@@ -38,4 +38,5 @@ public interface OrderDao {
      */
     public int checkReception(Order order);
 
+    public List<Order> selectAll();
 }

@@ -181,4 +181,28 @@ public class CommodityService {
         }
         return new Result();
     }
+
+    public Result getAllCommodities(String baseURL){
+        List<Commodity> commodityList = commodityDao.selectAll();
+        List<JSONObject> data = new ArrayList<>();
+        for (Commodity commodity : commodityList){
+            JSONObject jsonObject = new JSONObject();
+            commodity.setPicture(baseURL + pictureAccessDir + commodity.getPicture());
+            jsonObject.put("commodityPicture", commodity.getPicture());
+            jsonObject.put("sellerName", commodity.getSeller().getName());
+            jsonObject.put("commodityID", commodity.getId());
+            jsonObject.put("commodityType", commodity.getType());
+            jsonObject.put("commodityPrice", commodity.getPrice());
+            jsonObject.put("commodityName", commodity.getName());
+            data.add(jsonObject);
+        }
+        return new Result(data);
+    }
+
+    public Result removeCommodity(Long commodityID){
+        if (commodityDao.adminDeleteOne(commodityID) != 1){
+            return new Result("下架商品失败");
+        }
+        return new Result();
+    }
 }

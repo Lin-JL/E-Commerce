@@ -87,3 +87,13 @@ CREATE TABLE `cart`(
     FOREIGN KEY (`customer_id`) REFERENCES `user`(`student_id`),
     FOREIGN KEY (`commodity_id`) REFERENCES `commodity`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+# 创建表admin
+CREATE TABLE `admin`(
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `account` VARCHAR(16) NOT NULL ,
+    `password` VARCHAR(16) NOT NULL ,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+# 插入管理员信息
+INSERT INTO `admin`(`account`, `password`) VALUES ('admin', 'admin123');

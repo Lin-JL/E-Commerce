@@ -9,6 +9,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 @Component
@@ -31,7 +32,8 @@ public class MyAspect {
         String methodName = joinPoint.getSignature().getName();
         if (!methodName.equals("sendRegisterCode") && !methodName.equals("register") &&
                 !methodName.equals("login")){
-            if (request.getSession().getAttribute("studentID") == null){
+            HttpSession session = request.getSession();
+            if (session.getAttribute("studentID") == null && session.getAttribute("admin") == null){
                 return new Result("先登录");
             }
         }

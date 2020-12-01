@@ -56,6 +56,29 @@ public class OrderService {
 
     public Result getOrders(String baseURL, String customerID){
         List<Order> orders = orderDao.selectByCustomerID(customerID);
+        return polishOrders(baseURL, orders);
+    }
+    @Transactional
+    public Result addComment(Comment comment){
+        int star = comment.getStar();
+        if (star < 1 || star > 5){
+            return new Result("评分错误");
+        }
+        if (orderDao.checkReception(comment.getOrder()) != 1){
+            return new Result("添加评论失败");
+        }
+        if (commentDao.insertComment(comment) != 1){
+            return new Result("添加评论失败");
+        }
+        return new Result();
+    }
+
+    public Result getOrders(String baseURL){
+        List<Order> orders = orderDao.selectAll();
+        return polishOrders(baseURL, orders);
+    }
+
+    private Result polishOrders(String baseURL, List<Order> orders) {
         List<JSONObject> data = new ArrayList<>();
         for (Order order : orders){
             JSONObject jsonObject = new JSONObject();
@@ -76,18 +99,4 @@ public class OrderService {
         return new Result(data);
     }
 
-    @Transactional
-    public Result addComment(Comment comment){
-        int star = comment.getStar();
-        if (star < 1 || star > 5){
-            return new Result("评分错误");
-        }
-        if (orderDao.checkReception(comment.getOrder()) != 1){
-            return new Result("添加评论失败");
-        }
-        if (commentDao.insertComment(comment) != 1){
-            return new Result("添加评论失败");
-        }
-        return new Result();
-    }
 }

@@ -93,6 +93,24 @@
         DELETE FROM `commodity` WHERE `id`=#{commodityID} AND `seller_id`=#{sellerID}
     </delete>
 
+    <select id="selectAll" resultMap="commodityResultMap">
+        SELECT
+        C.id `commodity_id`,
+        C.name `commodity_name`,
+        C.type `commodity_type`,
+        C.price `commodity_price`,
+        C.picture `commodity_picture`,
+        U.student_id `seller_id`,
+        U.name `seller_name`
+        FROM `commodity` C
+        LEFT JOIN `user` U ON C.seller_id=U.student_id
+        WHERE `bought`='否'
+    </select>
+
+    <delete id="adminDeleteOne" parameterType="_long">
+        DELETE FROM `commodity` WHERE `id`=#{commodityID}
+    </delete>
+
     <resultMap id="commodityResultMap" type="com.databasedesign.ecommerce.commodity.model.Commodity">
         <id property="id" column="commodity_id"/>
         <result property="name" column="commodity_name"/>
