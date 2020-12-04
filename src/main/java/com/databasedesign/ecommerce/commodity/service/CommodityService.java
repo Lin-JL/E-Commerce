@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.databasedesign.ecommerce.commodity.dao.CommodityDao;
 import com.databasedesign.ecommerce.commodity.dao.CommodityTypeDao;
 import com.databasedesign.ecommerce.commodity.model.Commodity;
+import com.databasedesign.ecommerce.order.dao.CommentDao;
 import com.databasedesign.ecommerce.order.model.Comment;
 import com.databasedesign.ecommerce.user.model.User;
+import com.databasedesign.ecommerce.user.service.UserService;
 import com.databasedesign.ecommerce.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,9 @@ public class CommodityService {
 
     @Autowired
     private CommodityTypeDao commodityTypeDao;
+
+    @Autowired
+    private UserService userService;
 
     @Value("${file.commodityPicture.uploadPath}")
     private String pictureDir;
@@ -138,8 +143,9 @@ public class CommodityService {
             return new Result("商品不存在");
         }
         commodity.setPicture(baseURL + pictureAccessDir + commodity.getPicture());
+        User seller = commodity.getSeller();
         JSONObject data = new JSONObject();
-        data.put("sellerName", commodity.getSeller().getName());
+        data.put("sellerName", seller.getName());
         data.put("commodityID", commodity.getId());
         data.put("commodityName", commodity.getName());
         data.put("commodityType", commodity.getType());
@@ -147,6 +153,7 @@ public class CommodityService {
         data.put("commodityPicture", commodity.getPicture());
         data.put("commodityDescription", commodity.getDescription());
         data.put("commodityExpressFee", commodity.getExpressFee());
+        data.put("comments", userService.getComments(seller.getStudentID()).getData());
         return new Result(data);
     }
 
