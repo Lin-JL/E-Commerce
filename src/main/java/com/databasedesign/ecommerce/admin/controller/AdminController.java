@@ -48,7 +48,7 @@ public class AdminController {
     @GetMapping("admin_commodities")
     public Result getAllCommodities(HttpServletRequest request){
         HttpSession session = request.getSession();
-        if ((boolean)session.getAttribute("admin") != true){
+        if (session.getAttribute("admin") == null){
             return new Result("无权限");
         }
         String baseURL = WebUtils.getBaseURL(request);
@@ -58,7 +58,7 @@ public class AdminController {
     @DeleteMapping("admin_commodities/{id}")
     public Result removeCommodity(HttpServletRequest request,@PathVariable("id") Long commodityID){
         HttpSession session = request.getSession();
-        if ((boolean)session.getAttribute("admin") != true){
+        if (session.getAttribute("admin") == null){
             return new Result("无权限");
         }
         return commodityService.removeCommodity(commodityID);
@@ -67,7 +67,7 @@ public class AdminController {
     @GetMapping("admin_orders")
     public Result getAllOrders(HttpServletRequest request){
         HttpSession session = request.getSession();
-        if ((boolean)session.getAttribute("admin") != true){
+        if (session.getAttribute("admin") == null){
             return new Result("无权限");
         }
         String baseURL = WebUtils.getBaseURL(request);
