@@ -1,8 +1,10 @@
 package com.databasedesign.ecommerce.user.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.databasedesign.ecommerce.commodity.model.Commodity;
 import com.databasedesign.ecommerce.order.dao.CommentDao;
 import com.databasedesign.ecommerce.order.model.Comment;
+import com.databasedesign.ecommerce.order.model.Order;
 import com.databasedesign.ecommerce.user.dao.UserDao;
 import com.databasedesign.ecommerce.user.model.User;
 import com.databasedesign.ecommerce.user.utils.UserUtils;
@@ -153,8 +155,14 @@ public class UserService {
         List<JSONObject> data = new ArrayList<>();
         for (Comment comment : commentList){
             JSONObject jsonObject = new JSONObject();
+            Order order = comment.getOrder();
+            Commodity commodity = order.getCommodity();
+            User customer = order.getCustomer();
             jsonObject.put("content", comment.getContent());
             jsonObject.put("star", comment.getStar());
+            jsonObject.put("date", order.getDate());
+            jsonObject.put("commodity", commodity.getName());
+            jsonObject.put("customer", customer.getName());
             data.add(jsonObject);
         }
         return new Result(data);
